@@ -7,6 +7,10 @@ main: list.h main.cpp
 	@$(CC) $(FLAGS) list.h main.cpp  -o main
 	@./main
 	@rm main
+leaks: list.h main.cpp
+	@$(CC) $(FLAGS) list.h main.cpp -o main
+	@leaks -atExit -- ./main
+	@rm main
 
 style:
 	@clang-format --style=Google -i list.h *.cpp

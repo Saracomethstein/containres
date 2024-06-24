@@ -159,7 +159,7 @@ class list {
     if (empty())
       throw std::out_of_range("List is empty.");
     else {
-      Node *node = tail_;
+      Node *node = head_;
       if (size_ == 1) {
         head_ = nullptr;
         tail_ = nullptr;
@@ -206,6 +206,17 @@ class list {
       push_back(copy->value_);
       copy = copy->next_;
     }
+  }
+
+  void print() {
+    std::cout << "print list:\n{";
+    for (iterator it = begin(); it != end(); ++it) {
+      std::cout << *it;
+      if ((it + 1) != end()) {
+        std::cout << ", ";
+      }
+    }
+    std::cout << "}\n";
   }
 
   // Iterator //
@@ -263,15 +274,20 @@ class list {
     }
 
     bool operator==(ListIterator other) { return current_ == other.current_; }
+
     bool operator!=(ListIterator other) { return current_ != other.current_; }
+
     bool operator<(ListIterator other) { return current_ < other.current; }
+
     bool operator<=(ListIterator other) { return current_ <= other.current_; }
+
     bool operator>(ListIterator other) { return current_ > other.current_; }
+
     bool operator>=(ListIterator other) { return current_ >= other.currnet_; }
 
    private:
     Node *current_ = nullptr;
-    friend class list<value_type>;
+    friend class list<T>;
   };
 
   // Const Iterator //
@@ -288,10 +304,15 @@ class list {
   using const_iterator = ListConstIterator<T>;
 
   // List Iterators
-  //  iterator begin();
-  //  iterator end();
-  //  const_iterator begin() const;
-  //  const_iterator end() const;
+  iterator begin() { return !head_ ? iterator(end_) : iterator(head_); }
+
+  iterator end() { return iterator(end_); }
+
+  const_iterator begin() const {
+    return !head_ ? const_iterator(end_) : const_iterator(head_);
+  }
+
+  const_iterator end() const { return const_iterator(end_); }
 
   // List Modifiers
   //  iterator insert(iterator pos, const_reference value);
