@@ -11,8 +11,8 @@
 //  [done] - operator=(list &&l);
 //  [done] - const_reference front();
 //  [done] - const_reference back();
-//  - iterator begin();
-//  - iterator end();
+//  [done] - iterator begin();
+//  [done] - iterator end();
 //  - iterator insert(iterator pos, const_reference value);
 //  - void erase(iterator pos);
 //  [done] - void swap(list& other);
