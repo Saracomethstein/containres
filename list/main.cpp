@@ -1,8 +1,9 @@
-#include "s21_list.h"
+#include "list.h"
 using namespace s21;
 
 int main() {
   s21::list<int> myList = {1, 2, 3};
-  myList.pop_back();
+  s21::list<int> copy;
+  copy.copy(myList);
   return 0;
 }

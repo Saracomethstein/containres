@@ -68,12 +68,15 @@ class list {
     }
   }
 
-    list(const list &other)
-    {
-        
-    }
+  list(const list &other)
+      : head_(nullptr), tail_(nullptr), end_(nullptr), size_(0) {
+    end_ = other.size_;
+    copy();
+  }
 
-  //  list(list &&other) noexcept;
+  list(list &&other) noexcept : head_(nullptr), tail_(nullptr), end_(nullptr), size_(0) {
+    swap();
+  }
 
   ~list() {
     clear();
@@ -182,6 +185,32 @@ class list {
       }
     }
   }
+
+  void copy(const list &other) {
+    Node *copy = other.head_;
+    for (size_type i = 0; i != other.size_; i++) {
+      push_back(copy->value_);
+      copy = copy->next_;
+    }
+  }
+
+  void swap(list &other) {
+    std::swap(head_, other.head_);
+    std::swap(tail_, other.tail_);
+    std::swap(end_, other.end_);
+    std::swap(size_, other.size_);
+  }
+
+  //  void print(){
+  //      std::cout << "[";
+  //      for (iterator it = begin(); it != end(); ++it) {
+  //          std::cout << *it;
+  //          if ((it + 1) != end()) {
+  //              std::cout << ", ";
+  //          }
+  //      }
+  //      std::cout << "]\n";
+  //  }
 
   // Iterator //
   template <typename value_type>

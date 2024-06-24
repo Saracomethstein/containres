@@ -3,16 +3,16 @@ FLAGS = -Wall -Werror -Wextra
 
 all: main
 
-main: s21_list.h list_constructors.cpp main.cpp
-	@$(CC) $(FLAGS) s21_list.h list_constructors.cpp main.cpp  -o main
+main: list.h main.cpp
+	@$(CC) $(FLAGS) list.h main.cpp  -o main
 	@./main
 	@rm main
 
 style:
-	@clang-format --style=Google -i s21_list.h *.cpp
+	@clang-format --style=Google -i list.h *.cpp
 
 clang:
-	@clang-format --style=Google -n s21_list.h *.cpp
+	@clang-format --style=Google -n list.h *.cpp
 
 clean:
 	@rm *.o main *.gch
