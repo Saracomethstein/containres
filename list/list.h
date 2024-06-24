@@ -6,16 +6,16 @@
 #include <limits>
 
 // TODO List functions:
-//  - list(const list &l);
-//  - list(list &&l);
-//  - operator=(list &&l);
+//  [done] - list(const list &l);
+//  [done] - list(list &&l);
+//  [done] - operator=(list &&l);
 //  - const_reference front();
 //  - const_reference back();
 //  - iterator begin();
 //  - iterator end();
 //  - iterator insert(iterator pos, const_reference value);
 //  - void erase(iterator pos);
-//  - void swap(list& other);
+//  [done] - void swap(list& other);
 //  - void merge(list& other);
 //  - void splice(const_iterator pos, list& other);
 //  - void reverse();
@@ -74,8 +74,15 @@ class list {
     copy();
   }
 
-  list(list &&other) noexcept : head_(nullptr), tail_(nullptr), end_(nullptr), size_(0) {
+  list(list &&other) noexcept
+      : head_(nullptr), tail_(nullptr), end_(nullptr), size_(0) {
     swap();
+  }
+
+  list operator=(list &&other) noexcept {
+    clear();
+    swap(other);
+    return *this;
   }
 
   ~list() {
@@ -84,8 +91,9 @@ class list {
   }
 
   // List Element access //
-  //  const_reference front();
-  //  const_reference back();
+  const_reference front() { return !head_ ? end_->value_ : head_->value_; }
+
+  const_reference back() { return !tail_ ? end_->value_ : tail_->value_; }
 
   // List Capacity //
   bool empty() { return size_ == 0; }
@@ -96,11 +104,11 @@ class list {
     return (std::numeric_limits<size_type>::max() / sizeof(Node) / 2);
   }
 
+  // List Modifiers //
   void clear() {
     while (!empty()) pop_back();
   }
 
-  // List Modifiers //
   void push_back(value_type value) {
     Node *new_node = new Node(value);
     if (empty()) {
@@ -165,7 +173,13 @@ class list {
     }
   }
 
-  //  void swap(list &other);
+  void swap(list &other) {
+    std::swap(head_, other.head_);
+    std::swap(tail_, other.tail_);
+    std::swap(end_, other.end_);
+    std::swap(size_, other.size_);
+  }
+
   //  void merge(list &other);
   //  void reverse();
   //  void unique();
@@ -193,24 +207,6 @@ class list {
       copy = copy->next_;
     }
   }
-
-  void swap(list &other) {
-    std::swap(head_, other.head_);
-    std::swap(tail_, other.tail_);
-    std::swap(end_, other.end_);
-    std::swap(size_, other.size_);
-  }
-
-  //  void print(){
-  //      std::cout << "[";
-  //      for (iterator it = begin(); it != end(); ++it) {
-  //          std::cout << *it;
-  //          if ((it + 1) != end()) {
-  //              std::cout << ", ";
-  //          }
-  //      }
-  //      std::cout << "]\n";
-  //  }
 
   // Iterator //
   template <typename value_type>
