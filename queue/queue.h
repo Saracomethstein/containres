@@ -4,39 +4,43 @@
 #include "../list/list.h"
 
 namespace s21 {
-template <typename T, typename Container = s21::list<T>>
-class queue {
-
-public:
-  using value_type = typename Container::value_type;
-  using reference = typename Container::reference;
-  using const_reference = typename Container::const_reference;
-  using size_type = typename Container::size_type;
-
- protected:
-  Container cont;
-
+template <typename T>
+class queue : private list<T> {
  public:
-  queue() : cont() {}
-  queue(std::initializer_list<value_type> const &items) : cont(items) {}
-  queue(const queue &other) : cont(other.cont) {}
-  queue(queue &&other)  noexcept : cont(std::move(other.cont)) {}
-  ~queue() = default;
+  using value_type = T;
+  using reference = T &;
+  using const_reference = const T &;
+  using size_type = std::size_t;
 
-  queue &operator=(queue &&other)  noexcept {
-    this->cont = std::move(other.cont);
+  queue() : list<T>() {}
+  queue(std::initializer_list<value_type> const &items) : list<T>(items) {}
+  queue(const queue &other) : list<T>(other) {}
+  queue(queue &&other) : list<T>(std::move(other)) {}
+  ~queue() {}
+
+  const_reference front() { return list<T>::front(); }
+  const_reference back() { return list<T>::back(); }
+
+  bool empty() { return list<T>::empty(); }
+  size_type size() { return list<T>::size(); }
+
+  void push(const_reference value) { this->push_back(value); }
+  void pop() { this->pop_front(); }
+
+  void swap(queue &other) { list<T>::swap(other); }
+
+  queue &operator=(const queue &other) {
+    if (this != &other) {
+      list<T>::operator=(other);
+    }
     return *this;
   }
-
-  const_reference front() { return cont.front(); }
-  const_reference back() { return cont.back(); }
-
-  bool empty() { return cont.empty(); }
-  size_type size() { return cont.size(); }
-
-  void push(const_reference value) { this->cont.push_back(value); }
-  void pop() { this->cont.pop_front(); }
-  void swap(queue &other) { this->cont.swap(other.cont); }
+  queue &operator=(queue &&other) noexcept {
+    if (this != &other) {
+      list<T>::operator=(std::move(other));
+    }
+    return *this;
+  }
 };
 }  //  namespace s21
 #endif  // QUEUE_H
