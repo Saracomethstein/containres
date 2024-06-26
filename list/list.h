@@ -16,7 +16,7 @@
 //  [done] - iterator insert(iterator pos, const_reference value);
 //  [done] - void erase(iterator pos);
 //  [done] - void swap(list& other);
-//  - void merge(list& other);
+//  [done] - void merge(list& other);
 //  [done] - void splice(const_iterator pos, list& other);
 //  - void reverse();
 //  - void unique();
@@ -206,7 +206,16 @@ class list {
     other.clear();
   }
 
-  //  void reverse();
+  void reverse() {
+    if (!this->empty()) {
+      size_type step = 0;
+      for (iterator it = this->begin(); step <= this->size(); ++it) {
+        step++;
+        std::swap(it.current_->prev_, it.current_->next_);
+      }
+      std::swap(head_, tail_);
+    }
+  }
 
   //  void unique();
 

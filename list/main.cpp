@@ -2,12 +2,9 @@
 using namespace s21;
 
 int main() {
-  list<int> my_list = {1, 2, 3, 345, 345, 234};
-  list<int> new_list = {4, 5, 6};
+  list<int> my_list = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
   my_list.print();
-  new_list.print();
-  my_list.merge(new_list);
+  my_list.reverse();
   my_list.print();
-  new_list.print();
   return 0;
 }
