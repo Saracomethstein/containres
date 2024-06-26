@@ -18,9 +18,9 @@
 //  [done] - void swap(list& other);
 //  [done] - void merge(list& other);
 //  [done] - void splice(const_iterator pos, list& other);
-//  - void reverse();
-//  - void unique();
-//  - void sort();
+//  [done] - void reverse();
+//  [done] - void unique();
+//  [done] - void sort();
 
 namespace s21 {
 template <typename T>
@@ -217,9 +217,21 @@ class list {
     }
   }
 
-  //  void unique();
+  void unique() {
+    if (!this->empty()) {
+      for (iterator i = this->begin(); i != this->end(); i++) {
+        if (i.current_->value_ == i.current_->prev_->value_) {
+          iterator del_it = (i - 1);
+          this->erase(del_it);
+        }
+      }
+    }
+  }
 
-  void sort() {}
+  void sort() {
+    if (head_ == nullptr) return;
+    quick_sort(head_, tail_);
+  }
 
   // Tools //
   void set_end() {
@@ -253,6 +265,29 @@ class list {
       }
     }
     std::cout << "}\n";
+  }
+
+  Node *partition(Node *low, Node *high) {
+    T pivot = high->value_;
+    Node *i = low->prev_;
+
+    for (Node *j = low; j != high; j = j->next_) {
+      if (j->value_ <= pivot) {
+        i = (i == nullptr) ? low : i->next_;
+        std::swap(i->value_, j->value_);
+      }
+    }
+    i = (i == nullptr) ? low : i->next_;
+    std::swap(i->value_, high->value_);
+    return i;
+  }
+
+  void quick_sort(Node *low, Node *high) {
+    if (high != nullptr && low != high && low != high->next_) {
+      Node *p = partition(low, high);
+      quick_sort(low, p->prev_);
+      quick_sort(p->next_, high);
+    }
   }
 
   // Iterator //
@@ -313,13 +348,13 @@ class list {
 
     bool operator!=(ListIterator other) { return current_ != other.current_; }
 
-    bool operator<(ListIterator other) { return current_ < other.current; }
+    bool operator<(ListIterator other) { return current_ < other.current_; }
 
     bool operator<=(ListIterator other) { return current_ <= other.current_; }
 
     bool operator>(ListIterator other) { return current_ > other.current_; }
 
-    bool operator>=(ListIterator other) { return current_ >= other.currnet_; }
+    bool operator>=(ListIterator other) { return current_ >= other.current_; }
 
    private:
     Node *current_ = nullptr;
@@ -376,7 +411,7 @@ class list {
   }
 
   void erase(iterator pos) {
-    Node *current = pos.ptr_;
+    Node *current = pos.current_;
     if (!empty() && current != end_) {
       if (current == head_) {
         if (current->next_ && current->next_ != end_) {
