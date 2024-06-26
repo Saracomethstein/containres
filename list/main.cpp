@@ -2,13 +2,12 @@
 using namespace s21;
 
 int main() {
-  s21::list<int> my_list = {1, 2, 3, 4, 5, 6, 7, 7};
+  list<int> my_list = {1, 2, 3, 345, 345, 234};
+  list<int> new_list = {4, 5, 6};
   my_list.print();
-  my_list.push_back(234234);
+  new_list.print();
+  my_list.merge(new_list);
   my_list.print();
-  my_list.pop_back();
-  my_list.print();
-  my_list.pop_front();
-  my_list.print();
+  new_list.print();
   return 0;
 }

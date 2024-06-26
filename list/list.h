@@ -180,11 +180,37 @@ class list {
     std::swap(size_, other.size_);
   }
 
-  //  void merge(list &other);
+  void merge(list &other) {
+    if (!this->empty() && !other.empty()) {
+      iterator it_this = this->begin();
+      iterator it_other = other.begin();
+
+      while (it_this != this->end()) {
+        if (it_other != other.end()) {
+          if (it_this.current_->value_ >= it_other.current_->value_) {
+            this->insert(it_this, it_other.current_->value_);
+            it_other++;
+          } else
+            it_this++;
+        } else {
+          break;
+        }
+      }
+      while (it_other != other.end()) {
+        this->insert(it_this, it_other.current_->value_);
+        it_other++;
+      }
+    } else if (this->empty() && !other.empty()) {
+      this->copy(other);
+    }
+    other.clear();
+  }
 
   //  void reverse();
+
   //  void unique();
-  //  void sort();
+
+  void sort() {}
 
   // Tools //
   void set_end() {
@@ -317,7 +343,7 @@ class list {
 
   // List Modifiers
   iterator insert(iterator pos, const_reference value) {
-    Node *current = pos.ptr_;
+    Node *current = pos.current_;
     Node *add = new Node(value);
     if (empty()) {
       add->next_ = end_;
