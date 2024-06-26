@@ -13,11 +13,11 @@
 //  [done] - const_reference back();
 //  [done] - iterator begin();
 //  [done] - iterator end();
-//  - iterator insert(iterator pos, const_reference value);
-//  - void erase(iterator pos);
+//  [done] - iterator insert(iterator pos, const_reference value);
+//  [done] - void erase(iterator pos);
 //  [done] - void swap(list& other);
 //  - void merge(list& other);
-//  - void splice(const_iterator pos, list& other);
+//  [done] - void splice(const_iterator pos, list& other);
 //  - void reverse();
 //  - void unique();
 //  - void sort();
@@ -181,6 +181,7 @@ class list {
   }
 
   //  void merge(list &other);
+
   //  void reverse();
   //  void unique();
   //  void sort();
@@ -315,9 +316,64 @@ class list {
   const_iterator end() const { return const_iterator(end_); }
 
   // List Modifiers
-  //  iterator insert(iterator pos, const_reference value);
-  //  void erase(iterator pos);
-  //  void splice(const_iterator pos, list &other);
+  iterator insert(iterator pos, const_reference value) {
+    Node *current = pos.ptr_;
+    Node *add = new Node(value);
+    if (empty()) {
+      add->next_ = end_;
+      add->prev_ = end_;
+      head_ = add;
+      tail_ = add;
+    } else {
+      if (current == head_) {
+        head_ = add;
+      } else if (current == end_) {
+        tail_ = add;
+      }
+      add->next_ = current;
+      add->prev_ = current->prev_;
+      current->prev_->next_ = add;
+      current->prev_ = add;
+    }
+    size_++;
+    set_end();
+    return iterator(add);
+  }
+
+  void erase(iterator pos) {
+    Node *current = pos.ptr_;
+    if (!empty() && current != end_) {
+      if (current == head_) {
+        if (current->next_ && current->next_ != end_) {
+          head_ = current->next_;
+        } else {
+          head_ = end_;
+        }
+      } else if (current == tail_) {
+        if (current->prev_ && current->prev_ != end_) {
+          tail_ = current->prev_;
+        } else {
+          tail_ = end_;
+        }
+      }
+      current->prev_->next_ = current->next_;
+      current->next_->prev_ = current->prev_;
+      delete current;
+      this->size_--;
+    } else {
+      throw std::invalid_argument("Invalid argument");
+    }
+    set_end();
+  }
+
+  void splice(const_iterator pos, list &other) {
+    if (!other.empty()) {
+      for (iterator i = other.begin(); i != other.end(); ++i) {
+        this->insert(pos, *i);
+      }
+      other.clear();
+    }
+  }
 };
 }  // namespace s21
 #endif
