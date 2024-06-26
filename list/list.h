@@ -1,26 +1,9 @@
-#ifndef S21_LIST_H
-#define S21_LIST_H
+#ifndef LIST_H
+#define LIST_H
 
 #include <initializer_list>
 #include <iostream>
 #include <limits>
-
-// TODO List functions:
-//  [done] - list(const list &l);
-//  [done] - list(list &&l);
-//  [done] - operator=(list &&l);
-//  [done] - const_reference front();
-//  [done] - const_reference back();
-//  [done] - iterator begin();
-//  [done] - iterator end();
-//  [done] - iterator insert(iterator pos, const_reference value);
-//  [done] - void erase(iterator pos);
-//  [done] - void swap(list& other);
-//  [done] - void merge(list& other);
-//  [done] - void splice(const_iterator pos, list& other);
-//  [done] - void reverse();
-//  [done] - void unique();
-//  [done] - void sort();
 
 namespace s21 {
 template <typename T>
@@ -76,12 +59,22 @@ class list {
 
   list(list &&other) noexcept
       : head_(nullptr), tail_(nullptr), end_(nullptr), size_(0) {
-    swap();
+    swap(other);
   }
 
-  list operator=(list &&other) noexcept {
-    clear();
-    swap(other);
+  list &operator=(list &&other) noexcept {
+    if (this != &other) {
+      clear();
+      swap(other);
+    }
+    return *this;
+  }
+
+  list &operator=(const list &other) {
+    if (this != &other) {
+      clear();
+      copy(other);
+    }
     return *this;
   }
 
@@ -446,4 +439,4 @@ class list {
   }
 };
 }  // namespace s21
-#endif
+#endif  // LIST_H
